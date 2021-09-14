@@ -1,8 +1,46 @@
-// cf⇥ const arrow function assignment
+#!/usr/bin/env node
+
+const fs = require('fs')
+const util = require('util')
+
+// Method #2
+// const lstat = util.promisify(fs.lstat)
+
+// Method #3
+const { lstat } = fs.promises
+
+fs.readdir(process.cwd(), async (err, filenames) => {
+    if (err) {
+        throw new Error(err)
+    }
+
+    const statPromises = filenames.map((filename) => {
+        return lstat(filename)
+    })
+    const allStats = await Promise.all(statPromises)
+
+    for (let stats of allStats) {
+        const index = allStats.indexOf(stats)
+
+        console.log(filenames[index], stats.isFile())
+    }
+})
+
+// Method #1
+// const lstat = (filename) => {
+//     return new Promise((resolve, reject) => {
+//         fs.lstat(filename, function (err, stats) {
+//             if (err) reject(err)
+
+//             resolve(stats)
+//         })
+//     })
+// }
 
 // ta⇥ ternary statement
 // fl⇥ for loop (ES6)
 // fo⇥ for of loop (ES6)
+// fof→	for(let itemName of objectName { }
 // ife⇥ else statement
 // tc⇥ try/catch
 
@@ -48,11 +86,11 @@
 // me⇥ module.exports
 // cb⇥ Node.js style callback
 
-const fs = require('fs')
+// prom→ return new Promise((resolve, reject) => { }
 
-fs.readdir(process.cwd(), (err, filenames) => {
-    if (err) {
-        throw new Error(err)
-    }
-    console.log(filenames)
-})
+// ca⇥ const ${1:name} = await ${2:value}
+// cf⇥ const ${1:name} = (${2:arguments}) => {\n\treturn ${0}\n}
+// nfn→	const functionName = (params) => { }
+// dob→	const {propName} = objectToDestruct
+// cd⇥ const { ${1:name} } = ${2:value}
+// dar→	const [propName] = arrayToDestruct
